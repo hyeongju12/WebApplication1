@@ -1,24 +1,9 @@
 version: 0.2
-env:
-  variables:
-    SOLUTION: WebApplication1.sln
-    DOTNET_FRAMEWORK: 8.0
-
 phases:
-  install:
-    runtime-versions:
-      dotnet: 8.0
-      
-  pre_build:
-    commands:
-      - dotnet restore $SOLUTION
-      
   build:
     commands:
-      - dotnet build $SOLUTION -c Release
-      
+      - echo "Starting build"
+      - dotnet build
 artifacts:
   files:
-    - WebApplication1/bin/Release/net8.0/**/*
-    - appspec.yml
-  discard-paths: no
+    - '**/*'
