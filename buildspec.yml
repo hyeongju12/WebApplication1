@@ -1,37 +1,22 @@
 version: 0.2
-
 phases:
   install:
     runtime-versions:
       dotnet: 8.0
-    commands:
-      # Windows 환경에 필요한 추가 도구 설치
-      - choco install dotnet-windowshosting -y
-      
   pre_build:
     commands:
-      # NuGet 패키지 복원
       - dotnet restore
-      
   build:
     commands:
-      # Release 모드로 빌드
-      - dotnet build --configuration Release --no-restore
-      # 단위 테스트 실행 (테스트 프로젝트가 있는 경우)
-      - dotnet test --no-restore --verbosity normal
-      
+      - dotnet build -c Release
+      - dotnet test -c Release --no-build
   post_build:
     commands:
-      # 게시(publish) 실행
-      - dotnet publish --configuration Release --no-build --output publish_output
-
+      - dotnet publish -c Release --no-build -o ./publish_output
 artifacts:
+  base-directory: ./publish_output
   files:
-    - publish_output/**/*
-    - appspec.yml
-    - scripts/**/*
-  base-directory: '.'
-
+    - '**/*'
 cache:
   paths:
-    - '/root/.nuget/packages/**/*'
+    - '/root/.nuget/**/*'
