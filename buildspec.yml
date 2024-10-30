@@ -1,16 +1,24 @@
 version: 0.2
-
 env:
   variables:
-    SOLUTION: .\WebApplication1.sln
-    PACKAGE_DIRECTORY: .\packages
+    SOLUTION: WebApplication1.sln
     DOTNET_FRAMEWORK: 8.0
 
 phases:
+  install:
+    runtime-versions:
+      dotnet: 8.0
+      
+  pre_build:
+    commands:
+      - dotnet restore $SOLUTION
+      
   build:
     commands:
-      - '& nuget restore $env:SOLUTION -PackagesDirectory $env:PACKAGE_DIRECTORY'
-      - '& msbuild -p:FrameworkPathOverride="C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETFramework\v$env:DOTNET_FRAMEWORK" $env:SOLUTION'
+      - dotnet build $SOLUTION -c Release
+      
 artifacts:
   files:
-    - .\WebApplication1\bin\Debug\*
+    - WebApplication1/bin/Release/net8.0/**/*
+    - appspec.yml
+  discard-paths: no
